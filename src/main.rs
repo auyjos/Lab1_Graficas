@@ -26,21 +26,20 @@ fn main() {
     framebuffer.set_background_color(Color::new(50,50,100,255));
     framebuffer.clear();
     
-    // Function to draw polygon 2 - blue with white outline
-    let draw_polygon_2 = |fb: &mut Framebuffer| {
-        // Polygon 2 coordinates provided by the teacher
-        let polygon_2_vertices = vec![
-            Vector2::new(321.0, 335.0),
-            Vector2::new(288.0, 286.0),
-            Vector2::new(339.0, 251.0),
-            Vector2::new(374.0, 302.0),
+    // Function to draw polygon 3 - red with white outline
+    let draw_polygon_3 = |fb: &mut Framebuffer| {
+        // Polygon 3 coordinates provided by the teacher
+        let polygon_3_vertices = vec![
+            Vector2::new(377.0, 249.0),
+            Vector2::new(411.0, 197.0),
+            Vector2::new(436.0, 249.0),
         ];
         
-        // Draw polygon 2 with blue fill and white outline
-        draw_polygon(fb, &polygon_2_vertices, Color::BLUE, Color::WHITE);
+        // Draw polygon 3 with red fill and white outline
+        draw_polygon(fb, &polygon_3_vertices, Color::RED, Color::WHITE);
     };
     
-    draw_polygon_2(&mut framebuffer);
+    draw_polygon_3(&mut framebuffer);
     framebuffer.render_to_file("out.bmp");
     while !window.window_should_close(){
         // Check if window was resized
@@ -51,7 +50,7 @@ fn main() {
             // Resize the framebuffer to match the new window size
             framebuffer.resize(current_width as u32, current_height as u32);
             framebuffer.clear();
-            draw_polygon_2(&mut framebuffer);
+            draw_polygon_3(&mut framebuffer);
         }
         
         framebuffer.swap_buffers(&mut window, &raylib_thread);
