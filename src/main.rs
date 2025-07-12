@@ -26,29 +26,22 @@ fn main() {
     framebuffer.set_background_color(Color::new(50,50,100,255));
     framebuffer.clear();
     
-    // Function to draw polygon 1 - yellow with white outline (5-pointed star)
-    let draw_polygon_1 = |fb: &mut Framebuffer| {
-        // Star coordinates provided by the teacher
-        let polygon_1_vertices = vec![
-            Vector2::new(165.0, 380.0),
-            Vector2::new(185.0, 360.0),
-            Vector2::new(180.0, 330.0),
-            Vector2::new(207.0, 345.0),
-            Vector2::new(233.0, 330.0),
-            Vector2::new(230.0, 360.0),
-            Vector2::new(250.0, 380.0),
-            Vector2::new(220.0, 385.0),
-            Vector2::new(205.0, 410.0),
-            Vector2::new(193.0, 383.0),
+    // Function to draw polygon 2 - blue with white outline
+    let draw_polygon_2 = |fb: &mut Framebuffer| {
+        // Polygon 2 coordinates provided by the teacher
+        let polygon_2_vertices = vec![
+            Vector2::new(321.0, 335.0),
+            Vector2::new(288.0, 286.0),
+            Vector2::new(339.0, 251.0),
+            Vector2::new(374.0, 302.0),
         ];
         
-        // Draw polygon 1 with yellow fill and white outline
-        draw_polygon(fb, &polygon_1_vertices, Color::YELLOW, Color::WHITE);
+        // Draw polygon 2 with blue fill and white outline
+        draw_polygon(fb, &polygon_2_vertices, Color::BLUE, Color::WHITE);
     };
     
-    draw_polygon_1(&mut framebuffer);
+    draw_polygon_2(&mut framebuffer);
     framebuffer.render_to_file("out.bmp");
-
     while !window.window_should_close(){
         // Check if window was resized
         let current_width = window.get_screen_width();
@@ -58,7 +51,7 @@ fn main() {
             // Resize the framebuffer to match the new window size
             framebuffer.resize(current_width as u32, current_height as u32);
             framebuffer.clear();
-            draw_polygon_1(&mut framebuffer);
+            draw_polygon_2(&mut framebuffer);
         }
         
         framebuffer.swap_buffers(&mut window, &raylib_thread);
