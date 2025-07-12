@@ -4,7 +4,7 @@ mod polygon;
 
 use raylib::prelude::*;
 use framebuffer::Framebuffer;
-use polygon::draw_polygon;
+use polygon::draw_polygon_with_hole;
 
 fn main() {
     let window_width = 800;
@@ -26,20 +26,43 @@ fn main() {
     framebuffer.set_background_color(Color::new(50,50,100,255));
     framebuffer.clear();
     
-    // Function to draw polygon 3 - red with white outline
-    let draw_polygon_3 = |fb: &mut Framebuffer| {
-        // Polygon 3 coordinates provided by the teacher
-        let polygon_3_vertices = vec![
-            Vector2::new(377.0, 249.0),
-            Vector2::new(411.0, 197.0),
-            Vector2::new(436.0, 249.0),
+    // Function to draw polygon 4 - green with white outline (with polygon 5 as hole)
+    let draw_polygon_4 = |fb: &mut Framebuffer| {
+        // Polygon 4 coordinates provided by the teacher
+        let polygon_4_vertices = vec![
+            Vector2::new(413.0, 177.0),
+            Vector2::new(448.0, 159.0),
+            Vector2::new(502.0, 88.0),
+            Vector2::new(553.0, 53.0),
+            Vector2::new(535.0, 36.0),
+            Vector2::new(676.0, 37.0),
+            Vector2::new(660.0, 52.0),
+            Vector2::new(750.0, 145.0),
+            Vector2::new(761.0, 179.0),
+            Vector2::new(672.0, 192.0),
+            Vector2::new(659.0, 214.0),
+            Vector2::new(615.0, 214.0),
+            Vector2::new(632.0, 230.0),
+            Vector2::new(580.0, 230.0),
+            Vector2::new(597.0, 215.0),
+            Vector2::new(552.0, 214.0),
+            Vector2::new(517.0, 144.0),
+            Vector2::new(466.0, 180.0),
         ];
         
-        // Draw polygon 3 with red fill and white outline
-        draw_polygon(fb, &polygon_3_vertices, Color::RED, Color::WHITE);
+        // Polygon 5 coordinates (hole inside polygon 4)
+        let polygon_5_vertices = vec![
+            Vector2::new(682.0, 175.0),
+            Vector2::new(708.0, 120.0),
+            Vector2::new(735.0, 148.0),
+            Vector2::new(739.0, 170.0),
+        ];
+        
+        // Draw polygon 4 with polygon 5 as hole - green with white outline
+        draw_polygon_with_hole(fb, &polygon_4_vertices, &polygon_5_vertices, Color::GREEN, Color::WHITE);
     };
     
-    draw_polygon_3(&mut framebuffer);
+    draw_polygon_4(&mut framebuffer);
     framebuffer.render_to_file("out.bmp");
     while !window.window_should_close(){
         // Check if window was resized
@@ -50,7 +73,7 @@ fn main() {
             // Resize the framebuffer to match the new window size
             framebuffer.resize(current_width as u32, current_height as u32);
             framebuffer.clear();
-            draw_polygon_3(&mut framebuffer);
+            draw_polygon_4(&mut framebuffer);
         }
         
         framebuffer.swap_buffers(&mut window, &raylib_thread);

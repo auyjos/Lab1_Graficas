@@ -78,3 +78,50 @@ pub fn draw_polygon(framebuffer: &mut Framebuffer, vertices: &[Vector2], fill_co
     framebuffer.set_current_color(outline_color);
     draw_polygon_outline(framebuffer, vertices);
 }
+
+/// Fill a polygon with a hole using point-in-polygon test
+pub fn fill_polygon_with_hole(framebuffer: &mut Framebuffer, outer_vertices: &[Vector2], hole_vertices: &[Vector2]) {
+    if outer_vertices.len() < 3 || hole_vertices.len() < 3 {
+        return; // Need at least 3 vertices for polygons
+    }
+
+    // Find bounding box of outer polygon
+    let mut min_y = outer_vertices[0].y as i32;
+    let mut max_y = outer_vertices[0].y as i32;
+    let mut min_x = outer_vertices[0].x as i32;
+    let mut max_x = outer_vertices[0].x as i32;
+    
+    for vertex in outer_vertices {
+        let y = vertex.y as i32;
+        let x = vertex.x as i32;
+        if y < min_y { min_y = y; }
+        if y > max_y { max_y = y; }
+        if x < min_x { min_x = x; }
+        if x > max_x { max_x = x; }
+    }
+
+    // Use point-in-polygon test for each pixel
+    for y in min_y..=max_y {
+        for x in min_x..=max_x {
+            // Check if point is inside outer polygon but NOT inside hole
+            if point_in_polygon(x as f32, y as f32, outer_vertices) && 
+               !point_in_polygon(x as f32, y as f32, hole_vertices) {
+                framebuffer.set_pixel(x as u32, y as u32);
+            }
+        }
+    }
+}
+
+/// Draw a filled polygon with hole and outline
+pub fn draw_polygon_with_hole(framebuffer: &mut Framebuffer, outer_vertices: &[Vector2], hole_vertices: &[Vector2], fill_color: Color, outline_color: Color) {
+    // Draw fill first (outer polygon with hole)
+    framebuffer.set_current_color(fill_color);
+    fill_polygon_with_hole(framebuffer, outer_vertices, hole_vertices);
+    
+    // Draw outline of outer polygon
+    framebuffer.set_current_color(outline_color);
+    draw_polygon_outline(framebuffer, outer_vertices);
+    
+    // Draw outline of hole
+    draw_polygon_outline(framebuffer, hole_vertices);
+}
